@@ -10,10 +10,27 @@ class CoffeeInfo(QMainWindow):
         super(CoffeeInfo, self).__init__()
         uic.loadUi('main.ui', self)
 
+        result = []
         self.connection = sqlite3.connect('coffee.db')
         self.cursor = self.connection.cursor()
-        result = self.cursor.execute('''SELECT *
-                                         FROM Coffee''').fetchall()
+        for i in self.cursor.execute('''SELECT *
+                                        FROM Coffee''').fetchall():
+            result.append(list(i))
+        for i in range(len(result)):
+            for j in range(len(result[i])):
+                if j == 1 and result[i][j] == 1:
+                    result[i][j] = 'робуста'
+                if j == 1 and result[i][j] == 2:
+                    result[i][j] = 'арабика'
+                if j == 1 and result[i][j] == 3:
+                    result[i][j] = 'либерика'
+                if j == 2 and result[i][j] == 1:
+                    result[i][j] = 'светлая'
+                if j == 2 and result[i][j] == 2:
+                    result[i][j] = 'средняя'
+                if j == 2 and result[i][j] == 3:
+                    result[i][j] = 'тёмная'
+        print(result)
         self.connection.commit()
         self.connection.close()
         self.tableWidget.setRowCount(len(result))
